@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lanches & Bebidas</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">Lanches & Bebidas</div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#cardapio">Cardápio</a></li>
+        <li><a href="#contato">Contato</a></li>
+        <li><a href="#" id="link-pedidos">Pedidos (<span id="contador-pedidos">0</span>)</a></li>
+
+      </ul>
+    </nav>
+  </header>
+
+    <div class="carousel-inner">
+      <div class="carousel-slide">
+        <img src="https://blog.connectplug.com.br/wp-content/uploads/2018/05/group-friends-eating-together-scaled.jpg" alt="Hambúrguer" />
+      </div>
+      <div class="carousel-slide">
+        <img src="https://cms-cdn.saipos.com/assets/2023/03/10/Fale-com-um-vendedor_uid_640b7e4382273.png" alt="Batata Frita" />
+      </div>
+      <div class="carousel-slide">
+        <img src="https://blog.connectplug.com.br/wp-content/uploads/2018/05/group-friends-eating-together-scaled.jpg" alt="Refrigerante" />
+      </div>
+      <div class="carousel-slide">
+        <img src="https://cms-cdn.saipos.com/assets/2023/03/10/Fale-com-um-vendedor_uid_640b7e4382273.png" alt="Combo" />
+      </div>
+    </div>
+    <button class="carousel-btn prev">&#10094;</button>
+    <button class="carousel-btn next">&#10095;</button>
+  </section>
+
+<section id="cardapio" class="section">
+  <h2>Nosso Cardápio</h2>
+  <div class="cardapio-grid">
+
+    <div class="item1">
+      <h3>X-Burger</h3>
+      <img class="img1" src="https://img.uenicdn.com/image/upload/v1543484687/service_images/shutterstock_1040760661.jpg" alt="X-Burger" />
+      <p>Pão, carne, queijo, alface e tomate.</p>
+      <p class="preco">R$ 15,00</p>
+      <button class="btn-comprar" data-item="X-Burger" data-preco="15.00">Adicionar ao Pedido</button>
+    </div>
+
+    <div class="item5">
+      <h3>Cheeseburger</h3>
+      <img src="https://blog.precolandia.com.br/wp-content/uploads/2025/05/Hamburguer-com-bacon.jpg" alt="Cheeseburger" />
+      <p>Hambúrguer com queijo cheddar, alface e tomate.</p>
+      <p class="preco">R$ 12,50</p>
+      <button class="btn-comprar" data-item="Cheeseburger" data-preco="12.50">Adicionar ao Pedido</button>
+    </div>
+    <div class="item6">
+      <h3>Milkshake</h3>
+      <img src="https://www.academiaassai.com.br/sites/default/files/styles/noticia_1020x640/public/shake_capa.jpg?itok=6oFdpmdn" alt="Milkshake" />
+      <p>Milkshake de chocolate cremoso com flocos.</p>
+      <p class="preco">R$ 10,00</p>
+      <button class="btn-comprar" data-item="Milkshake" data-preco="10.00">Adicionar ao Pedido</button>
+    </div>
+    <div class="item7">
+      <h3>Hot Dog</h3>
+      <img src="https://cdn.pixabay.com/photo/2016/03/05/19/02/hotdog-1238247_1280.jpg" alt="Hot Dog" />
+      <p>Cachorro-quente com salsicha, ketchup.</p>
+      <p class="preco">R$ 8,00</p>
+      <button class="btn-comprar" data-item="Hot Dog" data-preco="8.00">Adicionar ao Pedido</button>
+    </div>
+    <div class="item8">
+      <h3>Refrigerante Lata</h3>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGGfrUpVVh37A20q9d1-XNr8a5VMTJOa1yDw&s" alt="Refrigerante Lata" />
+      <p>Lata de refrigerante gelado 350ml.</p>
+      <p class="preco">R$ 5,00</p>
+      <button class="btn-comprar" data-item="Refrigerante Lata" data-preco="5.00">Adicionar ao Pedido</button>
+    </div>
+
+    <div class="item9">
+      <h3>Pizza Calabresa</h3>
+      <img src="https://cdn.pixabay.com/photo/2017/12/09/08/18/pizza-3007395_1280.jpg" alt="Pizza Calabresa" />
+      <p>Deliciosa pizza com calabresa e queijo.</p>
+      <p class="preco">R$ 28,00</p>
+      <button class="btn-comprar" data-item="Pizza Calabresa" data-preco="28.00">Adicionar ao Pedido</button>
+    </div>
+    <div class="item10">
+      <h3>Salada Caesar</h3>
+      <img src="https://cdn.pixabay.com/photo/2018/06/18/16/05/salad-3482749_1280.jpg" alt="Salada Caesar" />
+      <p>Alface, frango grelhado, croutons e molho caesar.</p>
+      <p class="preco">R$ 18,00</p>
+      <button class="btn-comprar" data-item="Salada Caesar" data-preco="18.00">Adicionar ao Pedido</button>
+    </div>
+    <div class="item11">
+      <h3>Macarrão Especial</h3>
+      <img src="https://img.cybercook.com.br/receitas/610/espaguete-com-molho-a-bolonhesa-ou-ragu-bolognese-1.jpeg" alt="Espaguete à Bolonhesa" />
+      <p>Macarrão com molho bolonhesa caseiro.</p>
+      <p class="preco">R$ 25,00</p>
+      <button class="btn-comprar" data-item="Espaguete à Bolonhesa" data-preco="25.00">Adicionar ao Pedido</button>
+    </div>
+    <div class="item12">
+      <h3>Hambúrguer Vegano</h3>
+      <img src="https://guiadacozinha.com.br/wp-content/uploads/2020/03/hamburguer-de-quinoa-vegetariano.jpg" alt="Hambúrguer Vegano" />
+      <p>Hambúrguer feito com ingredientes 100% veganos.</p>
+      <p class="preco">R$ 20,00</p>
+      <button class="btn-comprar" data-item="Hambúrguer Vegano" data-preco="20.00">Adicionar ao Pedido</button>
+    </div>
+    <div class="item13">
+      <h3>Suco Natural</h3>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTScpqmi8FhlHRLB3bqPQ4vxYjG5FpxfHCFwg&s" alt="Suco Natural" />
+      <p>Suco natural de laranja sem adição de açúcar.</p>
+      <p class="preco">R$ 7,00</p>
+      <button class="btn-comprar" data-item="Suco Natural" data-preco="7.00">Adicionar ao Pedido</button>
+    </div>
+    <div class="item14">
+      <h3>Nachos com Queijo</h3>
+      <img src="https://alimentos10.com.br/wp-content/uploads/2023/10/nachos.png" alt="Nachos com Queijo" />
+      <p>Porção de nachos crocantes com molho de queijo.</p>
+      <p class="preco">R$ 22,00</p>
+      <button class="btn-comprar" data-item="Nachos com Queijo" data-preco="22.00">Adicionar ao Pedido</button>
+    </div>
+    <div class="item15">
+      <h3>Frango à Passarinho</h3>
+      <img src="https://www.receiteria.com.br/wp-content/uploads/frango-a-passarinho-capa.png" alt="Frango à Passarinho" />
+      <p>Pedaços de frango fritos temperados.</p>
+      <p class="preco">R$ 27,00</p>
+      <button class="btn-comprar" data-item="Frango à Passarinho" data-preco="27.00">Adicionar ao Pedido</button>
+    </div>
+    <div class="item16">
+      <h3>Hambúrguer Duplo</h3>
+      <img src="https://cdn.pixabay.com/photo/2014/10/19/20/59/hamburger-494706_1280.jpg" alt="Hambúrguer Duplo" />
+      <p>Dois hambúrgueres com queijo e bacon.</p>
+      <p class="preco">R$ 30,00</p>
+      <button class="btn-comprar" data-item="Hambúrguer Duplo" data-preco="30.00">Adicionar ao Pedido</button>
+    </div>
+    <div class="item17">
+      <h3>Churros</h3>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa9ltizmhTPW-vE-GT_L9eizYeN0ptCm90Rg&s" alt="Churros" />
+      <p>Churros crocantes com doce de leite.</p>
+      <p class="preco">R$ 12,00</p>
+      <button class="btn-comprar" data-item="Churros" data-preco="12.00">Adicionar ao Pedido</button>
+    </div>
+  </div>
+</section>
+
+
+  <section id="contato" class="section">
+    <h2>Contato</h2>
+    <form id="form-contato">
+      <input type="text" placeholder="Seu nome" required />
+      <input type="email" placeholder="Seu email" required />
+      <textarea placeholder="Sua mensagem"></textarea>
+      <button type="submit">Enviar</button>
+    </form>
+  </section>
+
+  <div id="modal-alert" class="modal-alert">
+  <div class="modal-content">
+    <p id="modal-message"></p>
+    <button id="modal-close-btn">Fechar</button>
+  </div>
+</div>
+
+
+  <footer>
+    <p>&copy; 2025 Lanches & Bebidas. Todos os direitos reservados.</p>
+  </footer>
+   
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
+<div id="pagamento-modal" class="modal-alert">
+  <div class="modal-content">
+    <h3>Escolha o método de pagamento</h3>
+    <button onclick="finalizarPagamento('dinheiro')">Dinheiro</button>
+    <button onclick="finalizarPagamento('debito')">Débito</button>
+    <button onclick="finalizarPagamento('pix')">Pix</button>
+    <div id="qrcode" style="margin-top: 20px;"></div>
+    <button onclick="fecharModal()">Fechar</button>
+  </div>
+</div>
+
+<div id="modal-pagamento" class="modal">
+  <div class="modal-content">
+    <span class="close-button" id="fechar-modal">&times;</span>
+    <h2>Forma de pagamento</h2>
+    <pre id="texto-pedido"></pre>
+    <div class="botoes-pagamento">
+      <button id="btn-dinheiro">Dinheiro</button>
+      <button id="btn-pix">Pix</button>
+    </div>
+  </div>
+</div>
+
+</body>

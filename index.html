@@ -18,23 +18,29 @@
       </button>
       <div class="navbar-menu" id="navbar-menu">
         <ul class="navbar-nav">
-          <li><a class="nav-link" href="#home"><i class="fas fa-home me-2"></i>Home</a></li>
+          <li><a class="nav-link" href="index.html"><i class="fas fa-home me-2"></i>Home</a></li>
           <li><a class="nav-link" href="cardapio.html"><i class="fas fa-utensils me-2"></i>Cardápio</a></li>
           <li><a class="nav-link" href="#destaques"><i class="fas fa-star me-2"></i>Destaques</a></li>
           <li><a class="nav-link" href="#contato"><i class="fas fa-envelope me-2"></i>Contato</a></li>
           <li>
-            <a class="nav-link btn-cart" href="#" id="link-pedidos">
-              <i class="fas fa-shopping-cart me-2"></i>Pedidos (<span id="contador-pedidos">0</span>)
+            <a class="" href="#" id="link-pedidos">
+             
             </a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-  <section id="home" class="hero-section">
+<section id="home" class="hero-section" style="
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('Img.png');
+    background-size: cover;
+    background-position: center;
+    color: white; /* Garante que o texto seja branco para contrastar com o fundo escuro */
+    padding: 100px 0; /* Adiciona algum espaçamento para que a imagem seja visível */
+">
     <div class="container text-center">
       <h1 class="hero-title">🍔 Bem-vindo ao Lanches & Bebidas!</h1>
-      <p class="hero-subtitle">Os melhores sabores, entregues com carinho na sua porta 🚀</p>
+      <p class="hero-subtitle">Os melhores sabores, entregues com carinho na sua porta! 🚀</p>
       <a href="cardapio.html" class="btn btn-hero">
         <i class="fas fa-utensils me-2"></i>Explorar Cardápio
       </a>
@@ -61,6 +67,7 @@
         </div>
       </div>
     </div>
+  </section>
   </section>
     <section class="carousel-container">
     <div class="carousel-track">
@@ -110,6 +117,8 @@
       </div>
     </div>
   </section>
+
+
   <section id="contato" class="contact-section">
     <div class="container">
       <div class="section-header text-center">
@@ -156,16 +165,16 @@
     <div class="container">
       <div class="grid-3 footer-grid">
         <div class="footer-col">
-          <h5 class="mb-3"><i class="fas fa-burger me-2"></i>Lanches & Bebidas</h5>
+          <h6 class="mb-3"><i class="fas fa-burger me-2"></i>Lanches & Bebidas</h5>
           <p>Sabor e qualidade em cada mordida. Fazendo sua refeição mais feliz desde 2020! 🍔</p>
         </div>
         <div class="footer-col">
-          <h5 class="mb-3"><i class="fas fa-clock me-2"></i>Horário de Funcionamento</h5>
+          <h6 class="mb-3"><i class="fas fa-clock me-2"></i>Horário de Funcionamento</h6>
           <p>Segunda a Sexta: 11h - 23h</p>
           <p>Sábado e Domingo: 11h - 00h</p>
         </div>
         <div class="footer-col">
-          <h5 class="mb-3"><i class="fas fa-map-marker-alt me-2"></i>Localização</h5>
+          <h6 class="mb-3"><i class="fas fa-map-marker-alt me-2"></i>Localização</h6>
           <p>Rio Grande, RS - Brasil</p>
           <p>(53) 99999-9999</p>
           <p>contato@lanchesebebidas.com</p>
@@ -183,33 +192,8 @@
       </div>
     </div>
   </footer>
-  <div id="modal-overlay" class="modal-overlay hidden">
-    <div id="modal-pagamento-content" class="modal-content hidden">
-      <div class="modal-header">
-        <h4><i class="fas fa-receipt me-2"></i>Finalizar Pedido</h4>
-        <button class="btn-close" onclick="fecharModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-4">
-          <h5 class="mb-3">Resumo do Pedido:</h5>
-          <pre id="texto-pedido" class="pedido-resumo"></pre>
-        </div>
-        <h5 class="mb-3">Escolha a forma de pagamento:</h5>
-        <div class="payment-options">
-          <button class="btn-outline-success" id="btn-dinheiro">
-            <i class="fas fa-money-bill-wave fa-2x"></i>
-            <div>Dinheiro</div>
-          </button>
-          <button class="btn-outline-info" id="btn-pix">
-            <i class="fas fa-qrcode fa-2x"></i>
-            <div>Pix</div>
-          </button>
-        </div>
-        <div id="qrcode" class="qrcode-area"></div>
-      </div>
-    </div>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="script.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="script.js"></script> 
 </body>
 </html>

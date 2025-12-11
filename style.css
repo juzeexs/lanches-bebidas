@@ -119,25 +119,24 @@ body {
   color: white !important;
 }
 
-/* --- Hero Section --- */
 .hero-section {
-  background: linear-gradient(135deg, #ffc400 0%, #ff7b00 100%);
-  padding: 120px 0 80px;
-  color: white;
-  position: relative;
+    /* O overlay escuro + sua imagem de fundo */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('sua-imagem-de-comida.jpg');
+    
+    background-size: cover; /* Faz com que a imagem cubra toda a seção */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita que a imagem se repita */
+    
+    color: white; /* Cor do texto para contraste */
+    padding: 150px 0; /* Aumenta o espaçamento para uma seção maior */
 }
 
-.hero-title {
-  font-size: 2rem;
-  font-weight: 900;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-  margin-bottom: 1rem;
-}
-
-.hero-subtitle {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  opacity: 0.9;
+/* Você pode precisar ajustar a cor do seu botão (btn-hero) para que ele se destaque no fundo escuro */
+.btn-hero {
+    /* Exemplo: Botão com fundo claro e texto escuro, ou borda para destaque */
+    background-color: #ffc107; /* Amarelo/laranja de destaque */
+    color: #212529;
+    border: none;
 }
 
 .btn {
@@ -166,6 +165,8 @@ body {
   box-shadow: 0 5px 15px rgb(0, 0, 0);
   background-color: #f8f9fa;
 }
+
+
 /* --- Stats Section --- */
 .stats-section {
   background: var(--dark);
@@ -198,12 +199,15 @@ body {
   box-shadow: none;
 }
 
+/* Seu CSS */
 .carousel-track {
   display: flex;
-  height: 100%;
-  /* ADICIONADO: Isso faz a imagem deslizar suavemente */
+  height: 100%; 
+  /* Adicione esta linha: */
   transition: transform 0.5s ease-in-out; 
 }
+/* O resto do seu CSS... */
+
 
 .carousel-slide {
   min-width: 100%;
@@ -338,8 +342,8 @@ body {
   background: var(--dark);
   color: white;
   padding: 80px 0;
-border-bottom-left-radius:20px;
-border-bottom-right-radius:20px;
+border-bottom-left-radius:30px;
+border-bottom-right-radius:30px;
 }
 
 .feature-box {
@@ -658,7 +662,7 @@ footer {
     width: 100%;
   }
 
-  .hero-title { font-size: 2rem; }
+  .hero-title { font-size: 1.2rem; }
   
   .form-grid { grid-template-columns: 1fr; }
   .form-group.full-width { grid-column: span 1; }

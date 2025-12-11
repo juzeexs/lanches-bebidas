@@ -28,7 +28,10 @@ function adicionarAoCarrinho(nome, preco) {
 
     // Atualiza o contador e renderiza o modal
     atualizarContadorPedidos();
-    renderizarPedidosModal();
+    // Verifica se o modal está aberto antes de tentar renderizar, para evitar erros
+    if (document.getElementById('modal-overlay') && !document.getElementById('modal-overlay').classList.contains('hidden')) {
+        renderizarPedidosModal();
+    }
 }
 
 /**
@@ -55,6 +58,7 @@ function ajustarQuantidade(nome, delta) {
         // Se a quantidade cair para 0 ou menos, remove o item
         if (item.quantidade <= 0) {
             removerItem(nome);
+            return; // Sai da função para evitar chamar a renderização duas vezes se remover
         }
     }
 
@@ -75,6 +79,8 @@ function calcularTotal() {
  */
 function atualizarContadorPedidos() {
     const contador = document.getElementById('contador-pedidos');
+    if (!contador) return; // Garante que o elemento existe
+    
     // Soma a quantidade de todos os itens no carrinho
     const totalItens = carrinho.reduce((acc, item) => acc + item.quantidade, 0);
     contador.textContent = totalItens;
@@ -90,6 +96,11 @@ function atualizarContadorPedidos() {
 function exibirModalPedidos() {
     const overlay = document.getElementById('modal-overlay');
     
+    if (!overlay) {
+        console.error("Elemento '#modal-overlay' não encontrado. Verifique seu HTML.");
+        return;
+    }
+
     // Cria o corpo principal do modal
     const modal = document.createElement('div');
     modal.classList.add('modal-content');
@@ -134,6 +145,9 @@ function renderizarPedidosModal() {
     const corpoModal = document.getElementById('corpo-modal-pedidos');
     const totalElement = document.getElementById('total-carrinho');
     const btnFinalizar = document.getElementById('btn-finalizar-pedido');
+    
+    if (!corpoModal || !totalElement || !btnFinalizar) return; // Garante que os elementos existem
+
     const total = calcularTotal();
 
     // Atualiza o total
@@ -195,6 +209,7 @@ function renderizarPedidosModal() {
  */
 function fecharModal() {
     const overlay = document.getElementById('modal-overlay');
+    if (!overlay) return;
     overlay.classList.add('hidden');
     overlay.innerHTML = ''; // Limpa o conteúdo
 }
@@ -205,6 +220,8 @@ function fecharModal() {
 function exibirFormularioFinalizacao() {
     const corpoModal = document.getElementById('corpo-modal-pedidos');
     const footerModal = document.querySelector('.modal-footer');
+
+    if (!corpoModal || !footerModal) return;
 
     // Desativa o botão de finalizar (ele será substituído por um botão de envio do form)
     footerModal.style.display = 'none';
@@ -251,12 +268,15 @@ function exibirFormularioFinalizacao() {
     // Adiciona listener para mostrar/esconder campo de troco
     document.getElementById('pagamento').addEventListener('change', (e) => {
         const trocoGroup = document.querySelector('.troco-group');
+        const inputTroco = document.getElementById('troco');
+        if (!trocoGroup || !inputTroco) return;
+
         if (e.target.value === 'dinheiro') {
             trocoGroup.classList.remove('hidden');
-            document.getElementById('troco').required = true;
+            inputTroco.required = true;
         } else {
             trocoGroup.classList.add('hidden');
-            document.getElementById('troco').required = false;
+            inputTroco.required = false;
         }
     });
 
@@ -325,7 +345,9 @@ function exibirConfirmacao(resumoPedido, total) {
     const modalContent = document.querySelector('.modal-content');
     const footerModal = document.querySelector('.modal-footer');
     
-    // Esconde o footer (se não estiver escondido) e remove listeners antigos
+    if (!corpoModal || !modalContent) return;
+
+    // Esconde o footer (se não estiver escondido)
     if (footerModal) footerModal.style.display = 'none';
 
     // Cria o HTML de confirmação
@@ -353,14 +375,20 @@ function exibirConfirmacao(resumoPedido, total) {
     modalContent.style.maxWidth = '500px';
 
     // Gera o QR Code (usando o resumo do pedido como conteúdo)
-    new QRCode(document.getElementById("qrcode"), {
-        text: resumoPedido,
-        width: 128,
-        height: 128,
-        colorDark: "#333333",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
+    // ATENÇÃO: A CLASSE 'QRCode' PRECISA SER INCLUÍDA NO SEU HTML VIA TAG <SCRIPT>!
+    if (typeof QRCode !== 'undefined') {
+        new QRCode(document.getElementById("qrcode"), {
+            text: resumoPedido,
+            width: 128,
+            height: 128,
+            colorDark: "#333333",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    } else {
+        document.getElementById("qrcode").innerHTML = '<p class="text-danger">Biblioteca QR Code não carregada. Verifique o HTML.</p>';
+        console.error("A biblioteca 'qrcode.js' não está carregada. O QR Code não será gerado.");
+    }
 
     // Limpa o carrinho após a finalização
     carrinho = [];
@@ -376,13 +404,16 @@ function exibirConfirmacao(resumoPedido, total) {
  */
 function filtrarProdutos() {
     const input = document.getElementById('input-pesquisa');
-    const filtro = input.value.toLowerCase();
     const listaProdutos = document.getElementById('lista-produtos');
+
+    if (!input || !listaProdutos) return;
+
+    const filtro = input.value.toLowerCase();
     const cards = listaProdutos.querySelectorAll('.card');
 
     cards.forEach(card => {
-        const titulo = card.querySelector('.card-title').textContent.toLowerCase();
-        const texto = card.querySelector('.card-text').textContent.toLowerCase();
+        const titulo = card.querySelector('.card-title')?.textContent.toLowerCase() || '';
+        const texto = card.querySelector('.card-text')?.textContent.toLowerCase() || '';
         
         // Exibe o card se o filtro corresponder ao título ou ao texto
         if (titulo.includes(filtro) || texto.includes(filtro)) {
@@ -393,17 +424,80 @@ function filtrarProdutos() {
     });
 }
 
+// ===================================
+// LÓGICA DO CARROSSEL INFINITO (INTEGRADA)
+// ===================================
+
+function inicializarCarrossel() {
+    const track = document.querySelector('.carousel-track');
+    const slides = Array.from(document.querySelectorAll('.carousel-slide'));
+    const buttons = document.querySelectorAll('.carousel-btn');
+
+    if (!track || slides.length === 0) {
+        // console.log("Carrossel não encontrado ou sem slides. Ignorando inicialização.");
+        return; // Sai se os elementos do carrossel não existirem
+    }
+    
+    const slideCount = slides.length;
+    let currentSlideIndex = 0;
+    
+    // Adiciona a propriedade transition-duration para animação suave
+    track.style.transitionDuration = '0.5s'; 
+    track.style.transitionTimingFunction = 'ease-in-out';
+
+    // Função principal para mover o carrossel
+    const moveToSlide = (newIndex) => {
+        // Lógica MÓDULO (%) para loop infinito
+        currentSlideIndex = (newIndex % slideCount + slideCount) % slideCount;
+        
+        const offset = -(currentSlideIndex * 100);
+        
+        // Aplica a transformação
+        track.style.transform = `translateX(${offset}%)`;
+    };
+
+    // Adiciona event listeners aos botões
+    buttons.forEach(button => {
+        button.addEventListener('click', e => {
+            const target = e.currentTarget.dataset.target;
+            let newIndex = currentSlideIndex;
+
+            if (target === 'next') {
+                newIndex++;
+            } else if (target === 'prev') {
+                newIndex--;
+            }
+
+            moveToSlide(newIndex);
+        });
+    });
+}
+
+// ===================================
+// FUNÇÃO DE INICIALIZAÇÃO PRINCIPAL
+// ===================================
+
 /**
  * Configura todos os event listeners ao carregar a página.
  */
 function inicializarEventos() {
-    // 1. Listeners para adicionar ao carrinho
+    // 1. Inicializa a lógica do Carrossel (SE EXISTIR)
+    inicializarCarrossel();
+    
+    // 2. Listeners para adicionar ao carrinho
     document.querySelectorAll('.btn-comprar').forEach(button => {
         button.addEventListener('click', (e) => {
             const nome = e.currentTarget.dataset.item;
             // Garante que o preço seja um número (parse para float)
             const preco = parseFloat(e.currentTarget.dataset.preco); 
+            
+            if (isNaN(preco)) {
+                console.error("Preço do item é inválido:", e.currentTarget.dataset.preco);
+                return;
+            }
+
             adicionarAoCarrinho(nome, preco);
+            
             // Feedback visual (opcional)
             e.currentTarget.innerHTML = '<i class="fas fa-check me-2"></i>Adicionado!';
             setTimeout(() => {
@@ -412,13 +506,16 @@ function inicializarEventos() {
         });
     });
 
-    // 2. Listener para abrir o modal de pedidos
-    document.getElementById('link-pedidos').addEventListener('click', (e) => {
-        e.preventDefault();
-        exibirModalPedidos();
-    });
+    // 3. Listener para abrir o modal de pedidos
+    const linkPedidos = document.getElementById('link-pedidos');
+    if (linkPedidos) {
+        linkPedidos.addEventListener('click', (e) => {
+            e.preventDefault();
+            exibirModalPedidos();
+        });
+    }
 
-    // 3. Listener para o botão de toggle do menu (mobile)
+    // 4. Listener para o botão de toggle do menu (mobile)
     const toggleButton = document.getElementById('menu-toggle');
     const navbarMenu = document.getElementById('navbar-menu');
     if (toggleButton && navbarMenu) {
@@ -427,8 +524,11 @@ function inicializarEventos() {
         });
     }
 
-    // 4. Listener para a pesquisa
-    document.getElementById('input-pesquisa').addEventListener('keyup', filtrarProdutos);
+    // 5. Listener para a pesquisa
+    const inputPesquisa = document.getElementById('input-pesquisa');
+    if (inputPesquisa) {
+        inputPesquisa.addEventListener('keyup', filtrarProdutos);
+    }
     
     // Inicializa o contador
     atualizarContadorPedidos();

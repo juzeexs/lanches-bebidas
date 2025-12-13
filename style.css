@@ -1,7 +1,7 @@
 :root {
   --primary: #ffae00;
   --secondary: #ce6e00;
-  --dark: #00000f;
+  --dark: #000000;
   --light: #f8f9fa;
   --text-grey: #666;
   --white: #ffffff;
@@ -784,3 +784,4 @@ footer {
   animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 
 }
+

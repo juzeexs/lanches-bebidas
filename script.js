@@ -1256,7 +1256,7 @@ style.textContent = `
 document.head.appendChild(style);
 
 // ========================================
-// CARROSSEL DE IMAGENS
+// CARROSSEL DE IMAGENS - VERSÃO SIMPLES
 // ========================================
 function inicializarCarrossel() {
   const track = document.getElementById('carousel-track');
@@ -1276,43 +1276,22 @@ function inicializarCarrossel() {
     track.style.transform = `translateX(${offset}%)`;
   }
   
-  function startAutoPlay() {
-    autoPlayInterval = setInterval(() => {
-      currentIndex++;
-      updateCarousel();
-      
-      // Quando passar da última, volta pra primeira sem transição visível
-      if (currentIndex >= totalSlides) {
-        setTimeout(() => {
-          currentIndex = 0;
-          updateCarousel(false);
-        }, 500);
-      }
-    }, 5000);
-  }
-  
-  function resetAutoPlay() {
-    clearInterval(autoPlayInterval);
-    startAutoPlay();
-  }
-  
-  btnNext.addEventListener('click', () => {
+  function irParaProximo() {
     currentIndex++;
     updateCarousel();
-    resetAutoPlay();
     
-    // Loop infinito ao clicar no botão next
+    // Loop infinito: volta pro início quando chegar no fim
     if (currentIndex >= totalSlides) {
       setTimeout(() => {
         currentIndex = 0;
         updateCarousel(false);
       }, 500);
     }
-  });
+  }
   
-  btnPrev.addEventListener('click', () => {
-    // Se estiver na primeira imagem, vai para a última
+  function irParaAnterior() {
     if (currentIndex === 0) {
+      // Pula pro final instantaneamente e volta uma
       currentIndex = totalSlides;
       updateCarousel(false);
       setTimeout(() => {
@@ -1323,11 +1302,37 @@ function inicializarCarrossel() {
       currentIndex--;
       updateCarousel();
     }
+  }
+  
+  function startAutoPlay() {
+    autoPlayInterval = setInterval(() => {
+      irParaProximo();
+    }, 5000);
+  }
+  
+  function resetAutoPlay() {
+    clearInterval(autoPlayInterval);
+    startAutoPlay();
+  }
+  
+  // Eventos dos botões
+  btnNext.addEventListener('click', () => {
+    irParaProximo();
     resetAutoPlay();
   });
   
+  btnPrev.addEventListener('click', () => {
+    irParaAnterior();
+    resetAutoPlay();
+  });
+  
+  // Inicializa
+  updateCarousel(false);
   startAutoPlay();
 }
+
+// Inicializa o carrossel
+inicializarCarrossel();
 
 // ========================================
 // MENU MOBILE

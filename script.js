@@ -1505,3 +1505,77 @@ document.addEventListener('DOMContentLoaded', () => {
   
   console.log('🍔 Sistema de Delivery inicializado com sucesso!');
 });
+
+function inicializarMapa() {
+  setTimeout(() => {
+    if (typeof ol === 'undefined') {
+      console.error('❌ OpenLayers não carregou');
+      return;
+    }
+
+    const mapElement = document.getElementById('map');
+    if (!mapElement) {
+      console.error('❌ Elemento #map não encontrado');
+      return;
+    }
+
+    try {
+      // Coordenadas de Rio Grande, RS
+      const coords = ol.proj.fromLonLat([-52.0986, -32.0350]);
+
+      // Criar mapa SEM controles
+      const map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View({
+          center: coords,
+          zoom: 15,
+          minZoom: 12,
+          maxZoom: 18
+        }),
+        controls: [] // ← SEM CONTROLES!
+      });
+
+      // Adicionar marcador personalizado
+      const marker = new ol.Feature({
+        geometry: new ol.geom.Point(coords)
+      });
+
+      marker.setStyle(new ol.style.Style({
+        image: new ol.style.Icon({
+          anchor: [0.5, 1],
+          src: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="48" viewBox="0 0 32 48"><path fill="%23FF6B35" d="M16 0C7.2 0 0 7.2 0 16c0 13 16 32 16 32s16-19 16-32c0-8.8-7.2-16-16-16z"/><circle cx="16" cy="16" r="6" fill="white"/></svg>',
+          scale: 1.2
+        })
+      }));
+
+      const vectorLayer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+          features: [marker]
+        })
+      });
+
+      map.addLayer(vectorLayer);
+
+      // Cursor pointer ao passar sobre o marcador
+      map.on('pointermove', (evt) => {
+        const hit = map.hasFeatureAtPixel(evt.pixel);
+        map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+      });
+
+      console.log('✅ Mapa limpo inicializado!');
+
+    } catch (error) {
+      console.error('❌ Erro ao criar mapa:', error);
+    }
+  }, 500);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // ... suas outras funções ...
+  inicializarMapa(); // ← Adicione essa linha
+});

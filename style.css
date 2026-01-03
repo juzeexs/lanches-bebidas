@@ -434,7 +434,7 @@ p{
 }
 
 .price {
-  font-size: 1.25rem;
+  font-size: 25px;
   font-weight: bold;
   color: var(--success);
   margin-bottom: 1rem;
@@ -444,6 +444,9 @@ p{
 .btn-comprar {
   background: linear-gradient(to right, #dd9700, #cc9c00);
   color: white;
+font-size: 16px;
+border-radius: 15px;
+
 }
 
 .btn-comprar:hover {

@@ -1582,28 +1582,210 @@ document.addEventListener('DOMContentLoaded', () => {
   inicializarMapa(); // ← Adicione essa linha
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const inputPesquisa = document.getElementById('input-pesquisa');
-    const cards = document.querySelectorAll('#lista-produtos .card');
-
-    // Função para remover acentos e deixar em minúsculo
-    const normalizar = (texto) => {
-        return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+// ========================================
+// SISTEMA DE BUSCA INTELIGENTE
+// ========================================
+class BuscaInteligente {
+  constructor() {
+    this.sinonimos = {
+      'pizza': ['piza', 'pizzas', 'pitza', 'pitsa'],
+      'hamburguer': ['hamburger', 'hambúrguer', 'hamburguer', 'x-burger', 'xburguer', 'sanduíche', 'lanche'],
+      'refrigerante': ['refri', 'coca', 'pepsi', 'soda', 'bebida'],
+      'suco': ['juice', 'vitamina', 'natural'],
+      'batata': ['fritas', 'frita', 'chips', 'batatas'],
+      'frango': ['chicken', 'galeto', 'ave'],
+      'carne': ['bife', 'churrasco', 'picanha'],
+      'queijo': ['cheese', 'mussarela', 'muçarela', 'catupiry'],
+      'salada': ['verdura', 'legumes', 'vegetais'],
+      'sobremesa': ['doce', 'pudim', 'mousse', 'sorvete', 'açaí'],
+      'cerveja': ['beer', 'chopp', 'chope', 'bebida alcoólica'],
+      'água': ['agua', 'mineral', 'hidratação'],
+      'macarrão': ['macarrao', 'pasta', 'espaguete', 'penne'],
+      'peixe': ['fish', 'salmão', 'tilápia', 'bacalhau']
     };
+    
+    this.errosComuns = {
+      'pissa': 'pizza',
+      'amburger': 'hamburguer',
+      'refri': 'refrigerante',
+      'batata frita': 'batata',
+      'x burger': 'hamburguer',
+      'suco natural': 'suco'
+    };
+  }
 
-    inputPesquisa.addEventListener('input', () => {
-        const termo = normalizar(inputPesquisa.value);
+  normalizar(texto) {
+    return texto
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+  }
 
-        cards.forEach(card => {
-            const titulo = normalizar(card.querySelector('.card-title').textContent);
-            const descricao = normalizar(card.querySelector('.card-text').textContent);
+  corrigirErros(termo) {
+    const termoNormalizado = this.normalizar(termo);
+    return this.errosComuns[termoNormalizado] || termoNormalizado;
+  }
 
-            // Se o termo estiver no título OU na descrição, mostra o card
-            if (titulo.includes(termo) || descricao.includes(termo)) {
-                card.style.display = "";
-            } else {
-                card.style.display = "none";
-            }
-        });
+  expandirComSinonimos(termo) {
+    const termoCorrigido = this.corrigirErros(termo);
+    const termosExpandidos = [termoCorrigido];
+    
+    for (const [palavra, sinonimos] of Object.entries(this.sinonimos)) {
+      if (termoCorrigido.includes(palavra) || sinonimos.some(s => termoCorrigido.includes(s))) {
+        termosExpandidos.push(palavra, ...sinonimos);
+      }
+    }
+    
+    return [...new Set(termosExpandidos)];
+  }
+
+  calcularSimilaridade(str1, str2) {
+    const s1 = str1.toLowerCase();
+    const s2 = str2.toLowerCase();
+    
+    if (s1 === s2) return 1;
+    if (s1.includes(s2) || s2.includes(s1)) return 0.8;
+    
+    const palavras1 = s1.split(/\s+/);
+    const palavras2 = s2.split(/\s+/);
+    let matches = 0;
+    
+    palavras1.forEach(p1 => {
+      palavras2.forEach(p2 => {
+        if (p1 === p2 || p1.includes(p2) || p2.includes(p1)) {
+          matches++;
+        }
+      });
     });
+    
+    return matches / Math.max(palavras1.length, palavras2.length);
+  }
+
+  calcularRelevancia(card, termoBusca) {
+    const titulo = this.normalizar(card.querySelector('.card-title').textContent);
+    const descricao = this.normalizar(card.querySelector('.card-text').textContent);
+    const termosExpandidos = this.expandirComSinonimos(termoBusca);
+    
+    let pontuacao = 0;
+    
+    termosExpandidos.forEach(termo => {
+      const termoNorm = this.normalizar(termo);
+      
+      if (titulo === termoNorm) pontuacao += 100;
+      else if (titulo.startsWith(termoNorm)) pontuacao += 80;
+      else if (titulo.includes(termoNorm)) pontuacao += 60;
+      
+      if (descricao.includes(termoNorm)) pontuacao += 30;
+      
+      pontuacao += this.calcularSimilaridade(titulo, termoNorm) * 40;
+      pontuacao += this.calcularSimilaridade(descricao, termoNorm) * 20;
+    });
+    
+    return pontuacao;
+  }
+
+  buscar(termoBusca, cards) {
+    if (!termoBusca || termoBusca.length < 2) {
+      cards.forEach(card => {
+        card.style.display = "";
+        card.style.order = "0";
+      });
+      return;
+    }
+
+    const resultados = Array.from(cards).map(card => ({
+      card,
+      pontuacao: this.calcularRelevancia(card, termoBusca)
+    }));
+
+    resultados.sort((a, b) => b.pontuacao - a.pontuacao);
+
+    let resultadosVisiveis = 0;
+    resultados.forEach((resultado, index) => {
+      if (resultado.pontuacao > 20) {
+        resultado.card.style.display = "";
+        resultado.card.style.order = index;
+        resultado.card.style.opacity = "0";
+        setTimeout(() => {
+          resultado.card.style.transition = "opacity 0.3s ease";
+          resultado.card.style.opacity = "1";
+        }, index * 50);
+        resultadosVisiveis++;
+      } else {
+        resultado.card.style.display = "none";
+      }
+    });
+
+    this.mostrarMensagemBusca(termoBusca, resultadosVisiveis);
+  }
+
+  mostrarMensagemBusca(termo, quantidade) {
+    let mensagemDiv = document.getElementById('mensagem-busca');
+    
+    if (!mensagemDiv) {
+      mensagemDiv = document.createElement('div');
+      mensagemDiv.id = 'mensagem-busca';
+      mensagemDiv.style.cssText = `
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      `;
+      
+      const listaProdutos = document.getElementById('lista-produtos');
+      if (listaProdutos) {
+        listaProdutos.parentNode.insertBefore(mensagemDiv, listaProdutos);
+      }
+    }
+
+    if (quantidade === 0) {
+      mensagemDiv.innerHTML = `
+        <i class="fas fa-search" style="font-size: 2em; color: #6c757d; margin-bottom: 10px;"></i>
+        <p style="margin: 10px 0 5px 0; color: #495057;">Nenhum produto encontrado para "${termo}"</p>
+        <small style="color: #6c757d;">Tente buscar por outro termo ou navegue por nossas categorias</small>
+      `;
+      mensagemDiv.style.background = "#f8f9fa";
+      mensagemDiv.style.border = "2px dashed #dee2e6";
+      mensagemDiv.style.display = "block";
+    } else if (termo.length >= 2) {
+      mensagemDiv.innerHTML = `
+        <i class="fas fa-check-circle" style="color: #28a745; margin-right: 8px;"></i>
+        <span style="color: #495057;">
+          Encontramos <strong style="color: #28a745;">${quantidade}</strong> 
+          ${quantidade === 1 ? 'produto' : 'produtos'} para "${termo}"
+        </span>
+      `;
+      mensagemDiv.style.background = "#d4edda";
+      mensagemDiv.style.border = "1px solid #c3e6cb";
+      mensagemDiv.style.display = "block";
+    } else {
+      mensagemDiv.style.display = "none";
+    }
+  }
+}
+
+const buscaInteligente = new BuscaInteligente();
+
+document.addEventListener('DOMContentLoaded', () => {
+  const inputPesquisa = document.getElementById('input-pesquisa');
+  const cards = document.querySelectorAll('#lista-produtos .card');
+  
+  if (inputPesquisa && cards.length > 0) {
+    let timeoutBusca;
+    
+    inputPesquisa.addEventListener('input', (e) => {
+      clearTimeout(timeoutBusca);
+      
+      timeoutBusca = setTimeout(() => {
+        buscaInteligente.buscar(e.target.value, cards);
+      }, 300);
+    });
+
+    inputPesquisa.placeholder = "Busque por pizza, hambúrguer, bebidas...";
+    
+    console.log('✅ Sistema de busca inteligente inicializado!');
+  }
 });

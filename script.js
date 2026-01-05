@@ -1583,7 +1583,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ========================================
-// SISTEMA DE BUSCA INTELIGENTE
+// SISTEMA DE BUSCA INTELIGENTE (VERSÃO CLEAN)
 // ========================================
 class BuscaInteligente {
   constructor() {
@@ -1701,7 +1701,6 @@ class BuscaInteligente {
 
     resultados.sort((a, b) => b.pontuacao - a.pontuacao);
 
-    let resultadosVisiveis = 0;
     resultados.forEach((resultado, index) => {
       if (resultado.pontuacao > 20) {
         resultado.card.style.display = "";
@@ -1711,59 +1710,10 @@ class BuscaInteligente {
           resultado.card.style.transition = "opacity 0.3s ease";
           resultado.card.style.opacity = "1";
         }, index * 50);
-        resultadosVisiveis++;
       } else {
         resultado.card.style.display = "none";
       }
     });
-
-    this.mostrarMensagemBusca(termoBusca, resultadosVisiveis);
-  }
-
-  mostrarMensagemBusca(termo, quantidade) {
-    let mensagemDiv = document.getElementById('mensagem-busca');
-    
-    if (!mensagemDiv) {
-      mensagemDiv = document.createElement('div');
-      mensagemDiv.id = 'mensagem-busca';
-      mensagemDiv.style.cssText = `
-        padding: 15px;
-        margin: 20px 0;
-        border-radius: 8px;
-        text-align: center;
-        font-weight: 500;
-        transition: all 0.3s ease;
-      `;
-      
-      const listaProdutos = document.getElementById('lista-produtos');
-      if (listaProdutos) {
-        listaProdutos.parentNode.insertBefore(mensagemDiv, listaProdutos);
-      }
-    }
-
-    if (quantidade === 0) {
-      mensagemDiv.innerHTML = `
-        <i class="fas fa-search" style="font-size: 2em; color: #6c757d; margin-bottom: 10px;"></i>
-        <p style="margin: 10px 0 5px 0; color: #495057;">Nenhum produto encontrado para "${termo}"</p>
-        <small style="color: #6c757d;">Tente buscar por outro termo ou navegue por nossas categorias</small>
-      `;
-      mensagemDiv.style.background = "#f8f9fa";
-      mensagemDiv.style.border = "2px dashed #dee2e6";
-      mensagemDiv.style.display = "block";
-    } else if (termo.length >= 2) {
-      mensagemDiv.innerHTML = `
-        <i class="fas fa-check-circle" style="color: #28a745; margin-right: 8px;"></i>
-        <span style="color: #495057;">
-          Encontramos <strong style="color: #28a745;">${quantidade}</strong> 
-          ${quantidade === 1 ? 'produto' : 'produtos'} para "${termo}"
-        </span>
-      `;
-      mensagemDiv.style.background = "#d4edda";
-      mensagemDiv.style.border = "1px solid #c3e6cb";
-      mensagemDiv.style.display = "block";
-    } else {
-      mensagemDiv.style.display = "none";
-    }
   }
 }
 
@@ -1785,7 +1735,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     inputPesquisa.placeholder = "Busque por pizza, hambúrguer, bebidas...";
-    
-    console.log('✅ Sistema de busca inteligente inicializado!');
+    console.log('✅ Busca inteligente pronta!');
   }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  const themeToggle = document.getElementById('theme-toggle');
+  const body = document.body;
+  const icon = themeToggle.querySelector('i');
+  
+  // Verificar se há tema salvo no localStorage
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    body.classList.add('dark-theme');
+    icon.classList.remove('fa-moon');
+    icon.classList.add('fa-sun');
+  }
+  
+  // Alternar tema ao clicar no botão
+  themeToggle.addEventListener('click', function() {
+    body.classList.toggle('dark-theme');
+    
+    // Alterar ícone
+    if (body.classList.contains('dark-theme')) {
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      icon.classList.remove('fa-sun');
+      icon.classList.add('fa-moon');
+      localStorage.setItem('theme', 'light');
+    }
+  });
 });

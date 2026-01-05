@@ -229,6 +229,7 @@ p{
   margin: 0 auto;
   overflow: hidden;
   position: relative;
+  background-color: black;
 }
 
 .carousel-overlay {

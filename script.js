@@ -1548,8 +1548,8 @@ const marker = new ol.Feature({
 marker.setStyle(new ol.style.Style({
   image: new ol.style.Icon({
     anchor: [0.5, 1],
-    // A cor foi alterada de %23FF6B35 para %23FFC400
-    src: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="36" viewBox="0 0 32 48"><path fill="%23FFC400" d="M16 0C7.2 0 0 7.2 0 16c0 13 16 32 16 32s16-19 16-32c0-8.8-7.2-16-16-16z"/><circle cx="16" cy="16" r="6" fill="white"/></svg>',
+    // Adicionado stroke="%23000000" (preto) e stroke-width="2"
+    src: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="36" viewBox="-2 -2 36 52"><path fill="%23FFC400" stroke="%23000000" stroke-width="2" d="M16 0C7.2 0 0 7.2 0 16c0 13 16 32 16 32s16-19 16-32c0-8.8-7.2-16-16-16z"/><circle cx="16" cy="16" r="6" fill="white"/></svg>',
     scale: 1.2
   })
 }));
@@ -1580,4 +1580,30 @@ const vectorLayer = new ol.layer.Vector({
 document.addEventListener('DOMContentLoaded', () => {
   // ... suas outras funções ...
   inicializarMapa(); // ← Adicione essa linha
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const inputPesquisa = document.getElementById('input-pesquisa');
+    const cards = document.querySelectorAll('#lista-produtos .card');
+
+    // Função para remover acentos e deixar em minúsculo
+    const normalizar = (texto) => {
+        return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    };
+
+    inputPesquisa.addEventListener('input', () => {
+        const termo = normalizar(inputPesquisa.value);
+
+        cards.forEach(card => {
+            const titulo = normalizar(card.querySelector('.card-title').textContent);
+            const descricao = normalizar(card.querySelector('.card-text').textContent);
+
+            // Se o termo estiver no título OU na descrição, mostra o card
+            if (titulo.includes(termo) || descricao.includes(termo)) {
+                card.style.display = "";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    });
 });

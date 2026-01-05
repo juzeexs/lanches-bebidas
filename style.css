@@ -60,9 +60,9 @@ p{
 }
 
 .text-center { text-align: center; }
-.text-white { color: white; }
-.text-primary { color: var(--primary); }
-.text-warning { color: #ffc107; }
+.text-white { color: #FFC400; } /* Alterado para a nova cor */
+.text-primary { color: #FFC400; } /* Alterado para a nova cor */
+.text-warning { color: #FFC400; } /* Removido o '23' para ficar sólido */
 .mb-3 { margin-bottom: 1rem; }
 .me-2 { margin-right: 0.5rem; }
 .w-100 { width: 100%; }
@@ -531,6 +531,7 @@ border-bottom-right-radius:30px;
 .btn-submit {
   background: linear-gradient(to right, #ff9900, #000000);
   color: white;
+font-size: 16px;
 }
 
 .btn-submit:hover {
@@ -789,37 +790,50 @@ footer {
   .payment-options { grid-template-columns: 1fr; }
 }
 
+/* Container da barra com o espaçamento e arredondamento de 10px */
 .search-bar {
-  margin-bottom: 2rem;
+  margin-bottom: 30px; 
 }
 
 .search-bar .input-group {
   display: flex;
-  width: 100%;
-  border: 1px solid #ececec;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.404);
+  border: 1px solid #ced4da;
+  border-radius: 10px; /* Seu padrão de arredondamento */
+  overflow: hidden; /* Garante que nada escape das bordas de 10px */
+  height: 45px;
+  background-color: #fff;
 }
 
+/* Estilo da Lupa */
 .search-bar .input-group-text {
-  background-color: #ffffff;
-  border: none;
-  padding: 0.75rem 1rem;
-  color: #4d4d4d;
+  background-color: #f8f9fa;
+  padding: 0 15px;
   display: flex;
   align-items: center;
+  color: #6c757d;
+  border-right: 1px solid #ced4da; /* Divisória sutil entre lupa e texto */
 }
 
+/* Estilo do Campo de Texto */
 .search-bar .form-control {
+  flex: 1;
   border: none;
-  padding: 0.75rem 1rem;
-  width: 100%;
-  font-size: 1rem;
+  padding: 0 15px;
+  font-size: 16px;
+  outline: none; /* Remove o contorno arredondado padrão do clique */
+  background: transparent;
 }
 
+/* Remove qualquer sombra ou contorno que o navegador tente colocar no foco */
 .search-bar .form-control:focus {
   outline: none;
+  box-shadow: none;
+}
+
+/* Opcional: Se quiser que a borda da barra inteira mude de cor ao clicar, 
+   sem criar novos arredondamentos */
+.search-bar .input-group:focus-within {
+  border-color: #FFC400; 
 }
 
 .hidden {
@@ -885,6 +899,7 @@ footer {
   border:none;
   position: relative;
   background: #f8f9fa;
+  border: 2px solid #FFC400;
 }
 
 /* Controles do OpenLayers customizados */

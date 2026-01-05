@@ -825,14 +825,8 @@ footer {
   background: transparent;
 }
 
-/* Remove qualquer sombra ou contorno que o navegador tente colocar no foco */
-.search-bar .form-control:focus {
-  outline: none;
-  box-shadow: none;
-}
 
-/* Opcional: Se quiser que a borda da barra inteira mude de cor ao clicar, 
-   sem criar novos arredondamentos */
+
 .search-bar .input-group:focus-within {
   border-color: #FFC400; 
 }

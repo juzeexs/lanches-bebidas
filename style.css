@@ -181,7 +181,7 @@ p{
 .btn {
   display: inline-block;
   padding: 12px 30px;
-  border-radius: 50px;
+  border-radius: 17px;
   text-decoration: none;
   font-weight: bold;
   transition: transform 0.3s, box-shadow 0.3s;

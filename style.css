@@ -445,12 +445,44 @@ p{
   flex-grow: 1;
 }
 
-.price {
-  font-size: 25px;
-  font-weight: bold;
-  color: var(--success);
+/* Estilos de preços promocionais */
+
+.price-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
   margin-bottom: 1rem;
+}
+
+.price-old {
+  font-size: 16px;
+  color: red;
+  text-decoration: line-through;
   font-family: 'Courier New', Courier, monospace;
+}
+
+.price {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--success, #28a745);
+  margin-bottom: 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Badge promocional com desconto */
+.promo-badge.promo-discount {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 8px 12px;
+  
+}
+
+
+/* Ajuste para cards sem promoção */
+.card .price:only-child {
+  margin-bottom: 1rem;
 }
 
 .btn-comprar {
